@@ -1,0 +1,25 @@
+{
+  "name": "myhooks",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@babel/helpers": "^7.24.8",
+    "@babel/preset-env": "^7.24.8",
+    "@babel/traverse": "^7.24.8",
+    "tslib": "^2.6.3",
+    "typescript": "^5.4.5"
+  }
+}
