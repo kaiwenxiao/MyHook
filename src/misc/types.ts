@@ -4,6 +4,6 @@
 // (in this case, "P extends Promise<infer T>" represents that something), but we get the eventually type of that.
 
 // infer always be paired with extends
-export type PromiseType<P extends Promise<any>> = P extends Promise<infer T> ? T : never;
+export type PromiseType<P> = P extends Promise<infer T> ? T : never;
 
 export type FunctionReturningPromise = (...args: any[]) => Promise<any>;
