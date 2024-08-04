@@ -90,53 +90,55 @@ describe('useAsyncFn', () => {
     const queuedPromises: { id: number, resolve: () => void }[] = []
     const delayedFunction1 = () => {
       return new Promise<number>((resolve) =>
-        queuedPromises.push({ id: 1, resolve: () => resolve(1) })
+        queuedPromises.push({id: 1, resolve: () => resolve(1)})
       );
     };
     const delayedFunction2 = () => {
       return new Promise<number>((resolve) =>
-        queuedPromises.push({ id: 2, resolve: () => resolve(2) })
+        queuedPromises.push({id: 2, resolve: () => resolve(2)})
       );
     };
 
     const hook = renderHook<
       { fn: () => Promise<number> },
       [AsyncState<number>, () => Promise<number>]
-    >(({ fn }) => useAsyncFn(fn, [fn]), {
-      initialProps: { fn: delayedFunction1 },
+    >(({fn}) => useAsyncFn(fn, [fn]), {
+      initialProps: {fn: delayedFunction1},
     });
     act(() => {
       hook.result.current[1](); // invoke 1st callback
     });
 
-    hook.rerender({ fn: delayedFunction2 });
+    hook.rerender({fn: delayedFunction2});
     act(() => {
       hook.result.current[1](); // invoke 2nd callback
     });
 
-    act(() => {
+
+    await hook.waitFor(() => act(() => {
       queuedPromises[1].resolve();
       queuedPromises[0].resolve();
-    });
-    await hook.waitForNextUpdate();
-    expect(hook.result.current[0]).toEqual({ loading: false, value: 2 });
+    }));
+    expect(hook.result.current[0]).toEqual({loading: false, value: 2});
   })
 
   it('should keeping value of initialState when loading', async () => {
     const fetch = async () => 'new state';
-    const initialState = { loading: false, value: 'init state' };
+    const initialState = {loading: false, value: 'init state'};
 
     const hook = renderHook<
       { fn: () => Promise<string> },
       [AsyncState<string>, () => Promise<string>]
-    >(({ fn }) => useAsyncFn(fn, [fn], initialState), {
-      initialProps: { fn: fetch },
+    >(({fn}) => useAsyncFn(fn, [fn], initialState), {
+      initialProps: {fn: fetch},
     });
 
     const [state, callback] = hook.result.current;
     expect(state.loading).toBe(false);
     expect(state.value).toBe('init state');
 
+    // act + waitForNextUpdate/waitFor === await what wrapped inside
+    // should know that the first type more nature for React, because it trigger component render, but second type just update javascript logic
     act(() => {
       callback();
     });
@@ -145,6 +147,11 @@ describe('useAsyncFn', () => {
     expect(hook.result.current[0].value).toBe('init state');
 
     await hook.waitForNextUpdate();
+    // or `waitFor` and pass the act function
+    // await hook.waitFor(() => act(() => {
+    //   callback();
+    // }))
+
     expect(hook.result.current[0].loading).toBe(false);
     expect(hook.result.current[0].value).toBe('new state');
   });

@@ -39,6 +39,7 @@ export default function useAsyncFn<T extends FunctionReturningPromise>(
   const [state, set] = useState<StateFromFunctionReturningPromise<T>>(initialState);
 
   // useCallback here only store our fetch function here, multiple clicks would still trigger many fetch, see example
+  // https://codesandbox.io/p/sandbox/frosty-moon-rfyjg4?file=%2Fsrc%2Fhooks%2FuseAsyncFn.ts%3A50%2C1
   const callback = useCallback((...args: Parameters<T>): ReturnType<T> => {
     // for sure if multiple requests in same time, more than two in pending, we don't get the first one response
     // always retrieve the result from last one. Why? Because the url is single, so we perceive that the last one
