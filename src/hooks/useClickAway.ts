@@ -4,7 +4,7 @@ import {off, on} from "../misc/util";
 const defaultEvents = ['mousedown', 'touchstart']
 
 const useClickAway = <E extends Event = Event>(
-  ref: RefObject<HTMLDivElement | null>,
+  ref: RefObject<HTMLElement | null>,
   onClickAway: (event: E) => void,
   events: string[] = defaultEvents,
 ) => {
