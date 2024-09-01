@@ -6,3 +6,6 @@ export { default as useMount } from './useMount'
 export { default as useClickAway } from './useClickAway'
 export { default as useTimeoutFn } from './useTimeoutFn';
 export { default as useDebounce } from './useDebounce';
+export { default as useRafState } from './useRafState';
+export { default as useWindowScroll } from './useWindowScroll';
+export { default as useWindowSize } from './useWindowSize';
